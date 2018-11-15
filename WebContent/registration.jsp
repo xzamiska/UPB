@@ -9,6 +9,7 @@
             "root", "");
     Statement st = con.createStatement();
     //ResultSet rs;
+    // haojik
     int i = st.executeUpdate("insert into users (login, fullName, password) " + "values ('" + user + "','" + fname + "','" + pwd + "')");
     if (i > 0) {
         //session.setAttribute("userid", user);
