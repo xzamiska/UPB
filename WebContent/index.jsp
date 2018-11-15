@@ -15,8 +15,8 @@
                 <input type="file" name="file" value="subor1"/><br>
                 <label for="subor2">Kľúč na náhratie </label>
                   <input type="file" name="file2" value="subor2"/><br>
-                   <input type="checkbox" name="encrypt" value="encrypt">Encrypt<br>
-  					<input type="checkbox" name="decrypt" value="decrypt">Decrypt<br>
+                  <input type="radio" name="encrypt" value="1">Encrypt<br>
+  				<input type="radio" name="encrypt" value="2">Decrypt<br>
                 <input type="submit" value="upload" />
             </form>          
         </div>
