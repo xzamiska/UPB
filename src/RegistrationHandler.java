@@ -112,26 +112,11 @@ public class RegistrationHandler extends HttpServlet {
 				if (i > 0) {
 					request.getSession().setAttribute("userid", user);
 					// nacitanie uzivatelov
-					ArrayList<String> uzivatelia = new ArrayList<String>();
-					rs = st.executeQuery("select login from users");
-
-					while (rs.next()) {
-						uzivatelia.add(rs.getString("login"));
-					}
-
-					String[] pole_uzivatelov = new String[uzivatelia.size()];
-
-					for (int x = 0; x < uzivatelia.size(); x++) {
-						pole_uzivatelov[x] = uzivatelia.get(x);
-					}
-					System.out.println(pole_uzivatelov.length);
-					request.setAttribute("logins", pole_uzivatelov);
+					
 					RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 					dispatcher.forward(request, response);
 					// out.print("Registration Successfull!"+"<a href='index.jsp'>Go to Login</a>");
-				} else {
-					response.sendRedirect("index2.jsp");
-				}
+				} 	
 
 			}
 		} catch (SQLException e) {

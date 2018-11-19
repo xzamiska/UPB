@@ -2,6 +2,7 @@
 <%@page import="java.sql.*"%>
 <%@page import="java.util.ArrayList"%>
  <%
+ 
  if (session.getAttribute("userid") == null){
 	 response.sendRedirect("index2.jsp");
  } 
@@ -76,7 +77,18 @@
     </form>
     
     <button id="backToUpload" class="btn btn_primary"><a href="logout.jsp">Logout</a></button>
-     <h3> Welcome <%=session.getAttribute("userid").toString()%></h3>
+    
+    <%
+    	if(session.getAttribute("userid") != null){
+    		%>
+    		 <h3> Welcome <%=
+     		session.getAttribute("userid").toString()
+     		
+     		%></h3>
+    		<%
+    	}
+    %>
+    
         <div>
             <h3> Choose File to Upload in Server </h3>
             <form id="fileUploadForm1" method="post" action="upload"

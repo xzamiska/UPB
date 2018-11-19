@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,10 +18,21 @@ public class LoginHandler extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-
+		Calendar calendar = Calendar.getInstance();
 		String userid = request.getParameter("uname");
 		String pwd = request.getParameter("pass");
-		//userid = userid.replaceAll("[^a-zA-Z0-9]", "");
+
+		LocalDateTime timeBan = (LocalDateTime) request.getSession().getAttribute("timeBan");
+		if (timeBan != null) {
+			if (timeBan.compareTo(LocalDateTime.now()) >= 0) {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/timeBan.jsp");
+				dispatcher.forward(request, response);
+			}
+		} else {
+			request.removeAttribute("timeBan");
+		}
+
+		userid = userid.replaceAll("[^a-zA-Z0-9]", "");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -44,6 +58,7 @@ public class LoginHandler extends HttpServlet {
 		try {
 			rs = st.executeQuery("select password from users where login='" + userid + "'");
 		} catch (SQLException e) {
+			response.sendRedirect("index2.jsp");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -57,6 +72,18 @@ public class LoginHandler extends HttpServlet {
 					dispatcher.forward(request, response);
 
 				} else {
+					/*
+					Integer failedTries = (Integer) request.getSession().getAttribute("failedTries");
+					if (failedTries != null) {
+						if (failedTries > 3) {
+							System.out.println("setujem time ban");
+							request.getSession().setAttribute("timeBan", LocalDateTime.now().plusMinutes((long) 30.0));
+						}
+						request.getSession().setAttribute("failedTries", failedTries + 1);
+					} else {
+						request.getSession().setAttribute("failedTries", 1);
+					}
+					*/
 					response.sendRedirect("index2.jsp");
 				}
 
@@ -64,6 +91,8 @@ public class LoginHandler extends HttpServlet {
 				// out.println("<a href='logout.jsp'>Log out</a>");
 
 			} else {
+				response.sendRedirect("index2.jsp");
+
 				// out.println("Invalid password <a href='index.jsp'>try again</a>");
 			}
 		} catch (SQLException e) {
