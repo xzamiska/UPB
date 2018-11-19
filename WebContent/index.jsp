@@ -1,30 +1,6 @@
  <%
  if (session.getAttribute("userid") == null){
 	 response.sendRedirect("index2.jsp");
- } else {
- 
- try {
-		Class.forName("com.mysql.jdbc.Driver");
-	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-
-	Connection con = null;
-	try {
-		con = DriverManager.getConnection("jdbc:mysql://147.175.121.179:3306/skuska_denis", "root", "");
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	Statement st = null;
-	try {
-		st = con.createStatement();
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
- 
  }
  
   %>
