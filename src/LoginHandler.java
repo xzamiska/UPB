@@ -23,10 +23,8 @@ public class LoginHandler extends HttpServlet {
 		String pwd = request.getParameter("pass");
 
 		LocalDateTime timeBan = (LocalDateTime) request.getSession().getAttribute("timeBan");
-		System.out.println(timeBan);
 		if (timeBan != null) {
 			if (timeBan.compareTo(LocalDateTime.now()) >= 0) {
-				System.out.println("doing redirect");
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/timeBan.jsp");
 				dispatcher.forward(request, response);
 			}
@@ -74,9 +72,8 @@ public class LoginHandler extends HttpServlet {
 					dispatcher.forward(request, response);
 
 				} else {
-					System.out.println("hovnoooo");
+					/*
 					Integer failedTries = (Integer) request.getSession().getAttribute("failedTries");
-					System.out.println(failedTries);
 					if (failedTries != null) {
 						if (failedTries > 3) {
 							System.out.println("setujem time ban");
@@ -86,6 +83,7 @@ public class LoginHandler extends HttpServlet {
 					} else {
 						request.getSession().setAttribute("failedTries", 1);
 					}
+					*/
 					response.sendRedirect("index2.jsp");
 				}
 
