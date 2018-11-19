@@ -1,7 +1,32 @@
  <%
- if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")){
+ if (session.getAttribute("userid") == null){
 	 response.sendRedirect("index2.jsp");
+ } else {
+ 
+ try {
+		Class.forName("com.mysql.jdbc.Driver");
+	} catch (ClassNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+	Connection con = null;
+	try {
+		con = DriverManager.getConnection("jdbc:mysql://147.175.121.179:3306/skuska_denis", "root", "");
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	Statement st = null;
+	try {
+		st = con.createStatement();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+ 
  }
+ 
   %>
  
  <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -19,6 +44,7 @@
     <button id="uploadBtn2" type="submit" class="btn btn_primary">MojeSubory</button>
 	</div>
     </form>
+    <button id="backToUpload" class="btn btn_primary"><a href="logout.jsp">Logout</a></button>
         <div>
             <h3> Choose File to Upload in Server </h3>
             <form id="fileUploadForm1" method="post" action="upload"
@@ -31,14 +57,17 @@
 					<div class="form_group">
 					<label>Choose user</label><span id="colon">: </span>
 				 <select id="userName" multiple="multiple" name="userName">
-               <% String[] namess=(String[])request.getAttribute("logins");
-                   
-                     for(int i=0; i<namess.length; i++) {
-                  %>
-                 
-                    <option value="<%=namess[i] %>"><%=namess[i] %></option>
-                
-                  <% }
+               <% 
+               if(request.getAttribute("logins") != null){
+	               String[] namess=(String[])request.getAttribute("logins");
+	                   
+	                     for(int i=0; i<namess.length; i++) {
+	                  %>
+	                 
+	                    <option value="<%=namess[i] %>"><%=namess[i] %></option>
+	                
+	                  <% }
+                    }
                     %>
                   
                    

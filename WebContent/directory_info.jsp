@@ -50,6 +50,8 @@ for (File file : subory_priecninka) {
 <title>Insert title here</title>
 </head>
 <body>
+	<button id="backToUpload" class="btn btn_primary"><a href="index.jsp">Back to upload</a></button>
+	<button id="backToUpload" class="btn btn_primary"><a href="logout.jsp">Logout</a></button>
 <form method="post" action="download">
 <table>
 
