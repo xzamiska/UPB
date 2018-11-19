@@ -53,6 +53,9 @@ for (File file : subory_priecninka) {
         text-decoration: none;
         color: black;
         }
+        .hyperLink {
+        
+        }
         </style>
 </head>
 <body>
@@ -66,7 +69,7 @@ for (File file : subory_priecninka) {
     	<tr>
     	<td>Author:<%=File.getNazov_authora()%></td>
     	<td>Subor:<%=File.getNazov_suboru()%></td>
-    	<td><a id="downloadLink" class="hyperLink" href="<%=request.getContextPath()%>/download?fileName=<%=File.getNazov_suboru()%>">Decrypt And Download</a></td> 
+    	<td><button><a id="downloadLink" class="hyperLink" href="<%=request.getContextPath()%>/download?fileName=<%=File.getNazov_suboru()%>">Decrypt And Download</a></button></td> 
     	</tr>
     <%
    	}
