@@ -1,3 +1,9 @@
+ <%
+ if ((session.getAttribute("userid") == null) || (session.getAttribute("userid") == "")){
+	 response.sendRedirect("index2.jsp");
+ }
+  %>
+ 
  <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
@@ -8,18 +14,42 @@
     </head>
  
     <body> 
+    <form id="fileUploadForm2" method="get" action="directory_info.jsp">
+    <div>
+    <button id="uploadBtn2" type="submit" class="btn btn_primary">MojeSubory</button>
+	</div>
+    </form>
         <div>
             <h3> Choose File to Upload in Server </h3>
-            <form action="upload" method="post" enctype="multipart/form-data">
-             <label for="subor1">Súbor na náhratie</label>
-                <input type="file" name="file" value="subor1"/><br>
-                <label for="subor2">Kľúč na náhratie </label>
-                  <input type="file" name="file2" value="subor2"/><br>
-                  <input type="radio" name="encrypt" value="1">Encrypt<br>
-  				<input type="radio" name="encrypt" value="2">Decrypt<br>
-                <input type="submit" value="upload" />
-            </form>          
-        </div>
-      
+            <form id="fileUploadForm1" method="post" action="upload"
+			enctype="multipart/form-data">
+			<div class="form_group">
+				<label>Upload File</label><span id="colon">: </span><input
+					id="fileAttachment" type="file" name="fileUpload"
+					multiple="multiple" /> 
+					</div>
+					<div class="form_group">
+					<label>Choose user</label><span id="colon">: </span>
+				 <select id="userName" multiple="multiple" name="userName">
+               <% String[] namess=(String[])request.getAttribute("logins");
+                   
+                     for(int i=0; i<namess.length; i++) {
+                  %>
+                 
+                    <option value="<%=namess[i] %>"><%=namess[i] %></option>
+                
+                  <% }
+                    %>
+                  
+                   
+                
+                 
+               </select>
+			</div>
+			<button id="uploadBtn1" type="submit" class="btn btn_primary">Encrypt
+				and send</button>
+		</form>
+                            
+        </div>     
     </body>
 </html>

@@ -5,8 +5,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Example</title>
     </head>
-    <body>
-        <form method="post" action="login.jsp">
+    <body>   
+        <form method="post" action="login">
             <center>
             <table border="1" width="30%" cellpadding="3">
                 <thead>
