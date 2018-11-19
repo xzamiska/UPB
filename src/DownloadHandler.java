@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,27 +51,27 @@ public class DownloadHandler extends HttpServlet {
 		String fileOut = applicationPath + File.separator + "dec" + fileName;  
 
 		String pathKey = applicationPath + File.separator + "keys" + File.separator + "privateKey.pem";
-		String path = applicationPath + File.separator + "keys" + File.separator + "Key.pem";
-	/*	File file = new File(filePath);
+//		String path = applicationPath + File.separator + "keys" + File.separator + "Key.pem";
+		
+		
+		// exncrypted key
+		File file = new File(filePath);
 
 		FileInputStream fin = new FileInputStream(file);
 		
 		byte[] vstup = new byte[(int) file.length()];
 		fin.read(vstup);
-	
-
+		System.out.println(vstup.toString());
 		
-		int zaciatok = vstup.length - 256;
-			
-		byte[] k = new byte[256]; // kluc
-
-		for (int i = 0; i < k.length; i++) {
-			k[i] = vstup[i + zaciatok];
-		}
-		
-		*/
+		byte[] key = Arrays.copyOfRange(vstup, vstup.length - 256, vstup.length);	
+		byte[] encrypte_text = Arrays.copyOfRange(vstup, 0, vstup.length - 256);
+		System.out.println(key.toString());
+		System.out.println(key.length);
+		System.out.println(encrypte_text.toString());
+		System.out.println(encrypte_text.length);
 		try {
-		 CryptoUtils.decrypt(filePath, fileOut, pathKey, path);
+			
+		 CryptoUtils.decrypt(fileOut, pathKey, key, encrypte_text);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,10 +93,20 @@ public class DownloadHandler extends HttpServlet {
 		try {
 			outStream = response.getOutputStream();
 			outStream.write(fileContent);
-
+			
+			
 		} catch (IOException ioExObj) {
 		} finally {
-
+			File file_to_delete = new File(fileOut); 
+			if(file_to_delete.exists()) 
+	        { 
+				file_to_delete.delete();
+	            System.out.println("File deleted successfully"); 
+	        } 
+	        else
+	        { 
+	            System.out.println("Failed to delete the file"); 
+	        } 
 			outStream.flush();
 			if (outStream != null) {
 				outStream.close();

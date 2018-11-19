@@ -18,7 +18,7 @@ public class LoginHandler extends HttpServlet {
 
 		String userid = request.getParameter("uname");
 		String pwd = request.getParameter("pass");
-		//userid = userid.replaceAll("[^a-zA-Z0-9]", "");
+		userid = userid.replaceAll("[^a-zA-Z0-9]", "");
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -44,6 +44,7 @@ public class LoginHandler extends HttpServlet {
 		try {
 			rs = st.executeQuery("select password from users where login='" + userid + "'");
 		} catch (SQLException e) {
+			response.sendRedirect("index2.jsp");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -74,11 +75,12 @@ public class LoginHandler extends HttpServlet {
 				} else {
 					response.sendRedirect("index2.jsp");
 				}
-
+				
 				// out.println("welcome " + userid);
 				// out.println("<a href='logout.jsp'>Log out</a>");
 
 			} else {
+				response.sendRedirect("index2.jsp");
 				// out.println("Invalid password <a href='index.jsp'>try again</a>");
 			}
 		} catch (SQLException e) {

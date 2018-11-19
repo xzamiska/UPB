@@ -41,7 +41,10 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.io.FileUtils;
 
 import com.sun.jndi.toolkit.url.Uri;
+import com.sun.org.apache.bcel.internal.util.ByteSequence;
 import com.sun.org.apache.xerces.internal.util.URI;
+
+import sun.security.util.Length;
 
 public class CryptoUtils {
 
@@ -162,8 +165,22 @@ public class CryptoUtils {
 		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding"); // vytvorenie instancie AES sifry s ECB/PKCS5PADDING
 																	// = sifrovanie blokov
 		cipher.init(Cipher.ENCRYPT_MODE, secretKey); // inicializacia sifry na encrypt mode
+		
+		 File filee = new File(fileName);
+		  FileInputStream inputStream = new FileInputStream(fileOut);
+			byte[] inputBytes = new byte[(int) filee.length()];
+			inputStream.read(inputBytes);
+			byte[] outputBytes = cipher.doFinal(inputBytes);
+			
+			FileOutputStream outputStream = new FileOutputStream(fileOut);
+			outputStream.write(outputBytes);
+			//outputStream.close();
+			inputStream.close();
+		
+		
+		
 		// String aha = fileName.getPath();
-		try {
+		/*try {
 			try (FileInputStream in = new FileInputStream(fileName);
 					FileOutputStream out = new FileOutputStream(fileOut)) {
 				byte[] ibuf = new byte[1024];
@@ -176,21 +193,29 @@ public class CryptoUtils {
 				}
 				byte[] obuf = cipher.doFinal();
 				if (obuf != null)
+				{
 					out.write(obuf);
-					out.close();		
+				}
+				out.close();
+				in.close();
+				
 			}
 			
 		} catch (Exception e) {
 			System.out.println("Error while encrypting: " + e.toString());
-		}
+		}*/
 		
 		Cipher cipher2 = Cipher.getInstance("RSA/ECB/PKCS1Padding"); 
 		PublicKey publicKey = loadPublicKey(path);
-		FileOutputStream outik = new FileOutputStream(path+"\\Key.pem");
+//		FileOutputStream outik = new FileOutputStream(fileOut);
 		cipher2.init(Cipher.ENCRYPT_MODE, publicKey);
 		byte[] encrypted = cipher2.doFinal(secretKey.getEncoded());
-		outik.write(encrypted);
-		outik.close();
+		System.out.println("tote kluce");
+		System.out.println(encrypted.length);
+		outputStream.write(encrypted);	
+//		outik.write(encrypted);
+		outputStream.close();
+//		outik.close();
 	}
 
 	public static String[] rsa_keys() throws NoSuchAlgorithmException, IOException {
@@ -210,49 +235,62 @@ public class CryptoUtils {
 	// Funkcia, ktorá načítava údaje z fileName a dešifruje ich do fileOut
 	// Načitáva a zapisáva postupne po 1024 bytov pretože by došlo k preťaženiu
 	//byte[] encrypted_key
-	  public static void decrypt(String filePath, String fileOut, String pathKey, String path) throws Exception {
+	  public static void decrypt(String fileOut, String pathKey, byte[] encrypted_key, byte[] encrypted_text) throws Exception {
 	  
 		  Cipher cipherRSA = Cipher.getInstance("RSA/ECB/PKCS1Padding"); 
 		  PrivateKey privateKey = loadPrivateKey(pathKey);
 		  cipherRSA.init(Cipher.DECRYPT_MODE, privateKey);
-		  File file = new File(path);
 
-			FileInputStream fin = new FileInputStream(file);
-			
-			byte[] vstup = new byte[(int) file.length()];
-			fin.read(vstup);
-		 
-		  
-		  byte[] decrypted= cipherRSA.doFinal(vstup);
-		  System.out.println("sem");
+		 System.out.println(encrypted_key.toString());
+		  byte[] decrypted= cipherRSA.doFinal(encrypted_key);
+//		  System.out.println("sem");
 
-		  SecretKey secretKey = new SecretKeySpec(decrypted,0,decrypted.length,"AES");
+		  SecretKey secretKey = new SecretKeySpec(decrypted,"AES");
 		  Cipher cipherAES = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		  cipherAES.init(Cipher.DECRYPT_MODE, secretKey); 
-		  try
+		  byte[] outputBytes = cipherAES.doFinal(encrypted_text);
+		  FileOutputStream outputStream = new FileOutputStream(fileOut);
+		  outputStream.write(outputBytes);
+		  outputStream.close();
+
+		  
+		  
+		  
+		  /* try
 	        {
 			  try (FileInputStream in = new FileInputStream(filePath);
 			            FileOutputStream out = new FileOutputStream(fileOut))
 			            {
-				  System.out.println("bol som tu"); 
+				  
 			                byte[] ibuf = new byte[1024];
 			                int len;
 			                while ((len = in.read(ibuf)) != -1)
 			                {
+			                	String skuska = new String(ibuf);
+			                	System.out.println(skuska);
+			                	System.out.println(len);
 			                    byte[] obuf = cipherAES.update(ibuf, 0, len);
-			                    if ( obuf != null ) 
-			                        out.write(obuf);
+			                    System.out.println(obuf.toString());
+			                    if ( obuf != null )
+			                    {
+			                    	System.out.println("som tu ");
+			                      //  out.write(obuf);
+			                    }
 			                }
-			                byte[] obuf = cipherAES.doFinal(ibuf);
+			                
+			                byte[] obuf = cipherAES.doFinal();
+			                System.out.println(obuf.toString());
 			                if ( obuf != null ) 
 			                    out.write(obuf);
+			                in.close();
+			                out.close();
 			            } 
 	                
 	        }
 	        catch (Exception e)
 	        {
 	            System.out.println("Error while decrypting: "+ e.toString());
-	        }
+	        }*/
 		  
 	  }
 	 
