@@ -67,23 +67,22 @@ public class LoginHandler extends HttpServlet {
 				String passwd = rs.getString("password");
 				if (CryptoUtils.verifyUserPassword(pwd, passwd) == true) {
 
-					
+					request.getSession().setAttribute("userid", userid);
 					RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 					dispatcher.forward(request, response);
 
 				} else {
-					/*
+					
 					Integer failedTries = (Integer) request.getSession().getAttribute("failedTries");
 					if (failedTries != null) {
 						if (failedTries > 3) {
-							System.out.println("setujem time ban");
 							request.getSession().setAttribute("timeBan", LocalDateTime.now().plusMinutes((long) 30.0));
 						}
 						request.getSession().setAttribute("failedTries", failedTries + 1);
 					} else {
 						request.getSession().setAttribute("failedTries", 1);
 					}
-					*/
+						
 					response.sendRedirect("index2.jsp");
 				}
 

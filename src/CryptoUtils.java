@@ -210,8 +210,6 @@ public class CryptoUtils {
 //		FileOutputStream outik = new FileOutputStream(fileOut);
 		cipher2.init(Cipher.ENCRYPT_MODE, publicKey);
 		byte[] encrypted = cipher2.doFinal(secretKey.getEncoded());
-		System.out.println("tote kluce");
-		System.out.println(encrypted.length);
 		outputStream.write(encrypted);	
 //		outik.write(encrypted);
 		outputStream.close();

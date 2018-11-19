@@ -158,7 +158,6 @@ public class FileUploadHandler extends HttpServlet {
 		for (int x = 0; x < uzivatelia.size(); x++) {
 			pole_uzivatelov[x] = uzivatelia.get(x);
 		}
-		System.out.println(pole_uzivatelov.length);
 		request.setAttribute("logins", pole_uzivatelov);
 		
 		
