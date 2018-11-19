@@ -1,7 +1,11 @@
+<%@page import="java.io.IOException"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.ArrayList"%>
  <%
  if (session.getAttribute("userid") == null){
 	 response.sendRedirect("index2.jsp");
- } else {
+ } 
+ String[] pole_uzivatelov = new String[1];
  
  try {
 		Class.forName("com.mysql.jdbc.Driver");
@@ -24,8 +28,28 @@
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
- 
- }
+	ResultSet rs = null;
+	
+	try {
+
+			// nacitanie uzivatelov
+			ArrayList<String> uzivatelia = new ArrayList<String>();
+			rs = st.executeQuery("select login from users");
+	
+			while (rs.next()) {
+				uzivatelia.add(rs.getString("login"));
+			}
+			
+			pole_uzivatelov = new String[uzivatelia.size()];
+			for (int i = 0; i < uzivatelia.size(); i++) {
+				pole_uzivatelov[i] = uzivatelia.get(i);
+			}
+		
+
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
  
   %>
  
@@ -36,6 +60,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>File Upload Example in JSP and Servlet - Java web application</title>
+        <style>
+        a {
+        text-decoration: none;
+        color: black;
+        }
+        </style>
     </head>
  
     <body> 
@@ -44,7 +74,9 @@
     <button id="uploadBtn2" type="submit" class="btn btn_primary">MojeSubory</button>
 	</div>
     </form>
+    
     <button id="backToUpload" class="btn btn_primary"><a href="logout.jsp">Logout</a></button>
+     <h3> Welcome <%=session.getAttribute("userid").toString()%></h3>
         <div>
             <h3> Choose File to Upload in Server </h3>
             <form id="fileUploadForm1" method="post" action="upload"
@@ -58,8 +90,8 @@
 					<label>Choose user</label><span id="colon">: </span>
 				 <select id="userName" multiple="multiple" name="userName">
                <% 
-               if(request.getAttribute("logins") != null){
-	               String[] namess=(String[])request.getAttribute("logins");
+               
+	               String[] namess=pole_uzivatelov;
 	                   
 	                     for(int i=0; i<namess.length; i++) {
 	                  %>
@@ -67,7 +99,7 @@
 	                    <option value="<%=namess[i] %>"><%=namess[i] %></option>
 	                
 	                  <% }
-                    }
+                    
                     %>
                   
                    
