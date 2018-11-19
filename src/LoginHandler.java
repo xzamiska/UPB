@@ -69,22 +69,7 @@ public class LoginHandler extends HttpServlet {
 				String passwd = rs.getString("password");
 				if (CryptoUtils.verifyUserPassword(pwd, passwd) == true) {
 
-					// nacitanie uzivatelov
-					ArrayList<String> uzivatelia = new ArrayList<String>();
-					rs = st.executeQuery("select login from users");
-
-					while (rs.next()) {
-						uzivatelia.add(rs.getString("login"));
-					}
-
-					String[] pole_uzivatelov = new String[uzivatelia.size()];
-
-					for (int i = 0; i < uzivatelia.size(); i++) {
-						pole_uzivatelov[i] = uzivatelia.get(i);
-					}
-					System.out.println(pole_uzivatelov.length);
-					request.setAttribute("logins", pole_uzivatelov);
-					request.getSession().setAttribute("userid", userid);
+					
 					RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 					dispatcher.forward(request, response);
 

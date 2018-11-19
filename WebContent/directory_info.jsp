@@ -48,6 +48,12 @@ for (File file : subory_priecninka) {
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<style>
+        a {
+        text-decoration: none;
+        color: black;
+        }
+        </style>
 </head>
 <body>
 	<button id="backToUpload" class="btn btn_primary"><a href="index.jsp">Back to upload</a></button>
